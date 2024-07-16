@@ -192,8 +192,13 @@ class DeepSpeedEngine(Module):
                  collate_fn=None,
                  config=None,
                  config_class=None,
-                 dont_change_device=False):
+                 dont_change_device=False,
+                 unwrapped_model = None):
         super(DeepSpeedEngine, self).__init__()
+        if unwrapped_model is not None:
+            optimizer = optimizer(unwrapped_model)
+        if lr_scheduler is not None:
+            lr_scheduler = lr_scheduler(optimizer)
         self.dont_change_device = dont_change_device
         self.client_optimizer = optimizer
         self.client_lr_scheduler = lr_scheduler
